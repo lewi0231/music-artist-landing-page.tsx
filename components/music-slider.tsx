@@ -3,6 +3,7 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
 import AnimatedSeparator from "./animated-separator";
+import WordsPullUp from "./word-pull-up";
 
 interface Track {
   title: string;
@@ -47,11 +48,11 @@ export default function MusicSlider({
             <div className="grid grid-cols-3 h-full w-full">
               <div className="col-span-1 flex items-end">
                 <div className="-rotate-90 whitespace-nowrap text-sm font-thin my-4">
-                  {weirdIdentifier}
+                  <WordsPullUp text={weirdIdentifier} delay={0.75} />
                 </div>
               </div>
               <div className="col-span-1 text-5xl flex items-end justify-end">
-                &#x21B3;
+                <WordsPullUp text="&#x21B3;" delay={0.75} />
               </div>
             </div>
           </div>
@@ -131,8 +132,8 @@ export default function MusicSlider({
         {/* Bottom row: Title */}
         <div className="grid grid-cols-5 gap-4 mt-4">
           <div className="col-span-2"></div>
-          <div className="col-span-3 text-6xl flex items-end">
-            {currentTrack.title}
+          <div className="col-span-3 text-[7rem] flex items-end">
+            <WordsPullUp text={currentTrack.title} delay={0.75} />
           </div>
         </div>
       </div>

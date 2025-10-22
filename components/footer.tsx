@@ -2,7 +2,7 @@ import AnimatedSeparator from "./animated-separator";
 
 function Footer() {
   return (
-    <div className="uppercase">
+    <div className="uppercase -mt-14">
       <AnimatedSeparator />
       <div className="flex justify-between items-center text-foreground/70 text-xs">
         <div className="">Back To Top</div>

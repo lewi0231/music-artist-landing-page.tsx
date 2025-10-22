@@ -47,14 +47,24 @@ export default function Home() {
           weirdIdentifier="TRACKS"
           tracks={[
             {
-              title: "Ignition",
-              platform: "spotify",
-              url: "YOUR_SPOTIFY_TRACK_ID", // Replace with actual Spotify track ID
+              title: "Corridors",
+              platform: "soundcloud",
+              url: "https://soundcloud.com/decodingseabirds/corridors",
             },
             {
-              title: "Singing Into Clouds",
+              title: "Marble Sea",
               platform: "soundcloud",
-              url: "https://soundcloud.com/YOUR_USERNAME/YOUR_TRACK", // Replace with actual SoundCloud URL
+              url: "https://soundcloud.com/decodingseabirds/marble-sea",
+            },
+            {
+              title: "From Here",
+              platform: "soundcloud",
+              url: "https://soundcloud.com/decodingseabirds/master-from-here",
+            },
+            {
+              title: "Dark Lights",
+              platform: "soundcloud",
+              url: "https://soundcloud.com/decodingseabirds/dark-lights",
             },
             // Add more tracks as needed
           ]}

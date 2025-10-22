@@ -1,36 +1,59 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Decoding Seabirds - Portfolio
+
+A music portfolio site showcasing selected tracks from Decoding Seabirds, my hobby music project. It's been a while since I created new music, but this site brings together some of my favorite pieces.
+
+## Inspiration
+
+This site is heavily inspired by the beautiful design work at [wilcock.co](https://wilcock.co). Credit where credit is due – their landing page aesthetic was too good not to recreate.
+
+## Features
+
+### Animations
+
+- **Pull-up text effects** using Framer Motion's `useInView` hook for scroll-triggered animations
+- **Staggered word reveals** on the hero title with custom cubic bezier easing
+- **AnimatePresence** for smooth page transitions and the music slider
+- **Scroll-aware navigation** that fades in/out as you scroll
+- **Image pull-up animations** similar to the text effects but for images, only triggered when scrolled into view
+- **Overlayed audio players** on images that appear on hover
+
+### Custom Cursor
+
+Built a custom cursor from scratch that:
+
+- Smoothly follows the mouse using `requestAnimationFrame`
+- Morphs based on velocity (squash and stretch effect)
+- Scales up on hover over clickable elements
+- Rotates based on direction of movement
+
+### Music Player
+
+- Interactive slider to browse through tracks
+- Embedded SoundCloud players
+- Smooth transitions between tracks
+
+## Tech Stack
+
+- **Next.js 15** with App Router
+- **React 19**
+- **Framer Motion** for all animations
+- **Tailwind CSS v4** for styling
+- **TypeScript**
+- Multiple Google Fonts (Turret Road, Anta, Sarpanch, Quicksand, Inter)
 
 ## Getting Started
 
-First, run the development server:
-
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) to view the site.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Notes
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+This is a work in progress. Some features are still being refined, and I might tweak the design as I go. The code is public purely for portfolio purposes – feel free to take a look around!
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+**Decoding Seabirds** – DS-3

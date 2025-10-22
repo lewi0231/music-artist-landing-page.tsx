@@ -1,5 +1,16 @@
+import CustomCursor from "@/components/custom-cursor";
+import Footer from "@/components/footer";
+import Nav from "@/components/nav";
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import {
+  Anta,
+  Geist,
+  Geist_Mono,
+  Inter,
+  Quicksand,
+  Sarpanch,
+  Turret_Road,
+} from "next/font/google";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -7,8 +18,36 @@ const geistSans = Geist({
   subsets: ["latin"],
 });
 
+const rationale = Turret_Road({
+  variable: "--font-turret-road",
+  subsets: ["latin"],
+  weight: "400",
+});
+
+const anta = Anta({
+  variable: "--font-anta",
+  subsets: ["latin"],
+  weight: "400",
+});
+
+const sarpanch = Sarpanch({
+  variable: "--font-sarpanch",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+});
+
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
+  subsets: ["latin"],
+});
+
+const inter = Inter({
+  variable: "--font-inter",
+  subsets: ["latin"],
+});
+
+const quicksand = Quicksand({
+  variable: "--font-quicksand",
   subsets: ["latin"],
 });
 
@@ -25,9 +64,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${rationale.variable} ${anta.variable} ${sarpanch.variable} ${inter.variable} ${quicksand.variable} antialiased w-5/6 m-auto`}
       >
+        <Nav />
         {children}
+        <CustomCursor />
+        <Footer />
       </body>
     </html>
   );

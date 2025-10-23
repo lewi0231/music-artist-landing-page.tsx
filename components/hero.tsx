@@ -5,7 +5,7 @@ import WordsPullUp from "./word-pull-up";
 
 export default function Hero() {
   return (
-    <section className="hero-section h-screen flex flex-col items-start pt-4 mb-10">
+    <section className="hero-section h-screen flex flex-col items-start pt-4 sm:mb-10 -mb-10">
       <div className="flex-1 items-start font-inter font-semibold">
         <TitlePullUp text="DECODING SEABIRDS" />
       </div>

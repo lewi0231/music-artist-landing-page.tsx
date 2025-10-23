@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 
 export const useIsScrollAtTop = (
   ref?: React.RefObject<HTMLElement>
-): boolean => {
+): { isAtTop: boolean } => {
   const [isAtTop, setIsAtTop] = useState(true);
 
   useEffect(() => {
@@ -20,5 +20,5 @@ export const useIsScrollAtTop = (
       target.removeEventListener("scroll", handleScroll);
     };
   }, [ref]);
-  return isAtTop;
+  return { isAtTop };
 };

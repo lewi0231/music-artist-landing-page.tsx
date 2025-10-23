@@ -9,10 +9,10 @@ import Hero from "../components/hero";
 export default function Home() {
   return (
     <div className=" mx-auto">
-      <main className="mt-40">
+      <main className="mt-28 sm:mt-40">
         <Hero />
-
         <Section
+          id="music"
           sectionIndex="01/"
           weirdIdentifier="PLP828"
           title="Ignition"

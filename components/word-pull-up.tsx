@@ -46,15 +46,7 @@ export default function WordsPullUp({
         variants={containerVariants}
       >
         <div className="overflow-hidden">
-          <motion.div
-            className={cn(className, "pb-2")}
-            style={
-              {
-                // lineHeight: 1.25,
-              }
-            }
-            variants={wordVariants}
-          >
+          <motion.div className={cn(className)} variants={wordVariants}>
             {text}
           </motion.div>
         </div>

@@ -4,10 +4,11 @@ import { useIsScrollAtTop } from "@/hooks/use-is-scroll-at-top";
 import { cn } from "@/lib/utils";
 import { AnimatePresence, motion } from "framer-motion";
 import Image from "next/image";
+import Link from "next/link";
 import FlickNavItem from "./flick-nav-item";
 
 export default function Nav({ className }: { className?: string }) {
-  const isAtTop = useIsScrollAtTop();
+  const { isAtTop } = useIsScrollAtTop();
 
   return (
     <AnimatePresence>
@@ -37,7 +38,9 @@ export default function Nav({ className }: { className?: string }) {
                   )}
                 >
                   <FlickNavItem>About</FlickNavItem>
-                  <FlickNavItem>Music</FlickNavItem>
+                  <FlickNavItem>
+                    <Link href="#music">Music</Link>
+                  </FlickNavItem>
                 </div>
               </div>
               <hr></hr>

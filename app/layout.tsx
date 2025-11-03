@@ -2,65 +2,17 @@ import CustomCursor from "@/components/custom-cursor";
 import Footer from "@/components/footer";
 import Nav from "@/components/nav";
 import type { Metadata } from "next";
-import {
-  Anta,
-  Bebas_Neue,
-  Geist,
-  Geist_Mono,
-  Inter,
-  Quicksand,
-  Sarpanch,
-  Turret_Road,
-} from "next/font/google";
+import { Inter } from "next/font/google";
 import "./globals.css";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const bebasNeue = Bebas_Neue({
-  variable: "--font-bebas-neue",
-  subsets: ["latin"],
-  weight: ["400"],
-});
-
-const rationale = Turret_Road({
-  variable: "--font-turret-road",
-  subsets: ["latin"],
-  weight: "400",
-});
-
-const anta = Anta({
-  variable: "--font-anta",
-  subsets: ["latin"],
-  weight: "400",
-});
-
-const sarpanch = Sarpanch({
-  variable: "--font-sarpanch",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
 
 const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
 });
 
-const quicksand = Quicksand({
-  variable: "--font-quicksand",
-  subsets: ["latin"],
-});
-
 export const metadata: Metadata = {
   title: "Decoding Seabirds",
-  description: "Musical artist with simple tracks",
+  description: "Musical artist with sample tracks",
 };
 
 export default function RootLayout({
@@ -78,7 +30,7 @@ export default function RootLayout({
         <script src="https://w.soundcloud.com/player/api.js" async />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${rationale.variable} ${anta.variable} ${sarpanch.variable} ${inter.variable} ${quicksand.variable} ${bebasNeue.variable} antialiased m-auto textured-background`}
+        className={` ${inter.variable}  antialiased m-auto textured-background`}
       >
         <Nav />
         {children}

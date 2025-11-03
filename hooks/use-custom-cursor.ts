@@ -89,11 +89,12 @@ export function useCursor(cursorRef: React.RefObject<HTMLElement | null>) {
       // Check if element is clickable
       const target = e.target as HTMLElement;
       const isClickable =
-        target.tagName === "A" ||
-        target.tagName === "BUTTON" ||
-        target.tagName === "IFRAME" ||
-        target.getAttribute("role") === "button" ||
-        window.getComputedStyle(target).cursor === "pointer";
+        // target.tagName === "A" ||
+        // target.tagName === "BUTTON" ||
+        // target.tagName === "IFRAME" ||
+        // target.getAttribute("role") === "button" ||
+        target.hasAttribute("data-pointer") ||
+        target.closest("[data-pointer]") !== null;
 
       isPointerRef.current = isClickable;
       setIsPointer(isClickable);

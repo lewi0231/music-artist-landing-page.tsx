@@ -2,7 +2,12 @@
 import { cn } from "@/lib/utils";
 import { Pause, Play } from "lucide-react";
 import React, { useRef, useState } from "react";
-import BirdsFlyingAnimation from "./birds-flying-animation";
+
+import dynamic from "next/dynamic";
+
+const BirdsFlyingAnimation = dynamic(() => import("./birds-flying-animation"), {
+  ssr: false,
+});
 
 export default function AudioPlayWrapper({
   children,
@@ -64,6 +69,7 @@ export default function AudioPlayWrapper({
       {!isPlaying && (
         <button
           onClick={togglePlay}
+          data-pointer
           className="absolute cursor-pointer inset-0 flex h-full items-center justify-center bg-black/50 rounded-2xl opacity-0 group-hover:opacity-50 transition-opacity duration-500 text-3xl z-10"
         >
           <Play />
@@ -73,6 +79,7 @@ export default function AudioPlayWrapper({
       {isPlaying && (
         <button
           onClick={togglePlay}
+          data-pointer
           className="absolute cursor-pointer top-4 right-4 w-12 h-12 flex items-center justify-center bg-black/50 rounded-full hover:bg-black/70 transition-opacity text-2xl z-20 backdrop-blur-sm"
         >
           <Pause />

@@ -38,10 +38,14 @@ export default function Nav({ className }: { className?: string }) {
                   )}
                 >
                   <FlickNavItem>
-                    <Link href="#about">About</Link>
+                    <Link href="#about" data-pointer>
+                      About
+                    </Link>
                   </FlickNavItem>
                   <FlickNavItem>
-                    <Link href="#music">Music</Link>
+                    <Link href="#music" data-pointer>
+                      Music
+                    </Link>
                   </FlickNavItem>
                 </div>
               </div>

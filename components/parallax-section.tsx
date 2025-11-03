@@ -453,6 +453,7 @@ export default function ParallaxSection({ tracks }: ParallaxSectionProps) {
                 ref={(el) => {
                   iframeRefs.current[index] = el;
                 }}
+                data-pointer
                 src={`https://w.soundcloud.com/player/?url=${encodeURIComponent(
                   track.url
                 )}&color=%23ff5500&auto_play=false&hide_related=true&show_comments=false&show_user=false&show_reposts=false&show_teaser=false&visual=false`}
@@ -463,6 +464,7 @@ export default function ParallaxSection({ tracks }: ParallaxSectionProps) {
               />
               <div
                 className="absolute inset-0 cursor-pointer"
+                data-pointer
                 onClick={() => handleTrackClick(index)}
               />
             </div>

@@ -14,16 +14,25 @@ function Footer() {
         <div className="">
           <button
             onClick={scrollToTop}
+            data-pointer
             className="hover:text-foreground transition-colors uppercase cursor-pointer"
           >
             Back To Top
           </button>
         </div>
         <div className="flex gap-6 py-10">
-          <a href={""}>Mail</a>
-          <a href={""}>github</a>
-          <a href={""}>instagram</a>
-          <a href={""}>x</a>
+          <a href={""} data-pointer>
+            Mail
+          </a>
+          <a href={""} data-pointer>
+            github
+          </a>
+          <a href={""} data-pointer>
+            instagram
+          </a>
+          <a href={""} data-pointer>
+            x
+          </a>
         </div>
       </div>
     </div>

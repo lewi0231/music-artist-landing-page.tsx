@@ -98,7 +98,9 @@
   position: fixed;
   height: var(--circle-size);
   width: var(--circle-size);
-  border: 2px solid limegreen;
+  border-color: #e6d1fc;
+  border-width: 4px;
+  border-style: solid;
   border-radius: 100%;
   top: calc(var(--circle-size) / 2 * -1);
   left: calc(var(--circle-size) / 2 * -1);

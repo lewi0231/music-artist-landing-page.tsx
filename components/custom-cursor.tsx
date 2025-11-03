@@ -14,7 +14,7 @@ export default function CustomCursor() {
       ref={cursorRef}
       className={cn(
         "circle z-100",
-        isPointer ? "animate-pulse bg-black/75 " : "",
+        isPointer ? "animate-pulse bg-black/75" : "",
         isVisible ? "opacity-100" : "opacity-0"
       )}
     />

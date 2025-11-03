@@ -1,6 +1,7 @@
 import { cn } from "@/lib/utils";
 import AnimatedSeparator from "./animated-separator";
 import Icon, { IconName } from "./icon";
+import TextPullUp from "./text-pull-up";
 import WordsPullUp from "./word-pull-up";
 
 type AboutProps = {
@@ -40,19 +41,22 @@ const AboutSection = ({ iconName, weirdIdentifier }: AboutProps) => {
           </div>
 
           {/* Image / Content */}
-          <div className="md:col-span-3 tracking-wider leading-loose">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptates
-            neque voluptatibus, odit molestias molestiae necessitatibus
-            asperiores quae incidunt laudantium facere facilis magni quia
-            aperiam error! Quae, inventore fugit? Iure dolore nisi magni veniam
-            adipisci vero optio explicabo quas voluptatum delectus fugit ipsam
-            aut quis possimus quibusdam amet porro, similique atque repellendus
-            in praesentium. Cumque, sapiente distinctio libero nihil veritatis
-            rerum quidem quasi mollitia modi ad nobis doloremque sed tenetur
-            excepturi vel inventore neque. Suscipit, sed beatae aliquid,
-            reiciendis quo tenetur consequuntur dignissimos quidem, quibusdam
-            quisquam error reprehenderit sunt quod! Deleniti earum accusamus,
-            quibusdam nostrum eaque possimus maiores animi aperiam placeat!
+          <div className="md:col-span-3 tracking-wider leading-loose text-lg">
+            <TextPullUp>
+              Lorem ipsum dolor sit amet consectetur adipisicing elit.
+              Voluptates neque voluptatibus, odit molestias molestiae
+              necessitatibus asperiores quae incidunt laudantium facere facilis
+              magni quia aperiam error! Quae, inventore fugit? Iure dolore nisi
+              magni veniam adipisci vero optio explicabo quas voluptatum
+              delectus fugit ipsam aut quis possimus quibusdam amet porro,
+              similique atque repellendus in praesentium. Cumque, sapiente
+              distinctio libero nihil veritatis rerum quidem quasi mollitia modi
+              ad nobis doloremque sed tenetur excepturi vel inventore neque.
+              Suscipit, sed beatae aliquid, reiciendis quo tenetur consequuntur
+              dignissimos quidem, quibusdam quisquam error reprehenderit sunt
+              quod! Deleniti earum accusamus, quibusdam nostrum eaque possimus
+              maiores animi aperiam placeat!
+            </TextPullUp>
           </div>
         </div>
 

@@ -34,10 +34,36 @@ export default function TitlePullUp({
 
   return (
     <div className="relative">
+      {/* Static text for LCP - invisible but present in DOM */}
+      <div
+        className="relative opacity-0 pointer-events-none"
+        aria-hidden="true"
+      >
+        {words.map((word, index) => (
+          <div key={`static-${index}`}>
+            <div
+              className="sm:text-[6rem] md:text-[7.5rem] lg:text-[11rem] xl:text-[13rem] text-start tracking-narrow bg-clip-text text-foreground bg-cover bg-center sm:-ml-2 text-[4rem] font-inter"
+              style={{ lineHeight: 1 }}
+            >
+              {word}
+            </div>
+          </div>
+        ))}
+        <div>
+          <div
+            className="sm:text-[6rem] md:text-[7.5rem] lg:text-[10rem] xl:text-[13rem] text-start tracking-narrow bg-clip-text text-transparent bg-[url('/seabirds-background.jpg')] bg-cover bg-center sm:-ml-2 text-[4rem]"
+            style={{ lineHeight: 1 }}
+          >
+            ▼
+          </div>
+        </div>
+      </div>
+
+      {/* Animated text that covers the static version */}
       <motion.div
-        className=" relative"
-        animate="animate"
-        initial="initial"
+        className="  absolute top-0 left-0 w-full"
+        animate={"animate"}
+        initial={"initial"}
         variants={containerVariants}
       >
         {words.map((word, index) => {

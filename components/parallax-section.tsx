@@ -213,20 +213,6 @@ export default function ParallaxSection({ tracks }: ParallaxSectionProps) {
     return () => unsubscribe();
   }, [textureOpacity]);
 
-  // Load SoundCloud Widget API
-  useEffect(() => {
-    const script = document.createElement("script");
-    script.src = "https://w.soundcloud.com/player/api.js";
-    script.async = true;
-    document.body.appendChild(script);
-
-    return () => {
-      if (document.body.contains(script)) {
-        document.body.removeChild(script);
-      }
-    };
-  }, []);
-
   // Handle track click
   const handleTrackClick = (index: number) => {
     const iframe = iframeRefs.current[index];

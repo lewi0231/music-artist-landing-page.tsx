@@ -63,6 +63,8 @@ export default function Home() {
             src="/circle.jpg"
             width={800}
             height={500}
+            sizes="(max-width: 768px) 100vw, 661px"
+            quality={70}
             className="w-full h-auto aspect-auto opacity-75 rounded-2xl"
           />
         </Section>
@@ -77,6 +79,8 @@ export default function Home() {
             src="/clouds.jpg"
             width={1920}
             height={1080}
+            sizes="(max-width: 768px) 100vw, 661px"
+            quality={70}
             className="w-full h-auto aspect-auto opacity-75 rounded-2xl"
           />
         </Section>

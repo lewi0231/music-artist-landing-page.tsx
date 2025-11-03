@@ -78,7 +78,7 @@ export default function AudioPlayWrapper({
           <Pause />
         </button>
       )}
-      <audio ref={audioRef} src={audioSrc} />
+      <audio ref={audioRef} src={audioSrc} preload="none" />
     </div>
   );
 }

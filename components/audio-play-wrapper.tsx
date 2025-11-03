@@ -1,7 +1,8 @@
 "use client";
-import { useGravityAnimation } from "@/hooks/use-gravity-animation";
 import { cn } from "@/lib/utils";
+import { Pause, Play } from "lucide-react";
 import React, { useRef, useState } from "react";
+import BirdsFlyingAnimation from "./birds-flying-animation";
 
 export default function AudioPlayWrapper({
   children,
@@ -11,14 +12,15 @@ export default function AudioPlayWrapper({
   audioSrc: string;
 }) {
   const [isPlaying, setIsPlaying] = useState(false);
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [isFullScreen, setIsFullScreen] = useState(false);
 
   const audioRef = useRef<HTMLAudioElement>(null);
-  const canvasRef = useRef<HTMLCanvasElement | null>(null);
+  // const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
   // Use the gravity animation hook
-  useGravityAnimation(canvasRef, isPlaying, isFullScreen);
+  // useGravityAnimation(canvasRef, isPlaying, isFullScreen);
 
   const togglePlay = () => {
     if (audioRef.current) {
@@ -46,25 +48,25 @@ export default function AudioPlayWrapper({
       <div
         className={cn(
           "transition-opacity duration-1000",
-          isPlaying ? "opacity-20" : "opacity-100"
+          isPlaying ? "opacity-10" : "opacity-80"
         )}
       >
         {children}
       </div>
-      <canvas
-        ref={canvasRef}
+
+      <BirdsFlyingAnimation
         className={cn(
-          "absolute inset-0 w-full h-full transition-opacity duration-1000 pointer-events-auto",
-          isPlaying ? "opacity-100" : "opacity-0 pointer-events-none"
+          "absolute inset-0 w-full h-full transition-opacity duration-300 pointer-events-auto",
+          isPlaying ? "opacity-100" : "opacity-0"
         )}
       />
       {/* Play button - visible only when not playing */}
       {!isPlaying && (
         <button
           onClick={togglePlay}
-          className="absolute cursor-pointer inset-0 flex h-full items-center justify-center bg-black/50 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity text-3xl z-10"
+          className="absolute cursor-pointer inset-0 flex h-full items-center justify-center bg-black/50 rounded-2xl opacity-0 group-hover:opacity-50 transition-opacity duration-500 text-3xl z-10"
         >
-          ▶
+          <Play />
         </button>
       )}
       {/* Pause button - always visible when playing */}
@@ -73,7 +75,7 @@ export default function AudioPlayWrapper({
           onClick={togglePlay}
           className="absolute cursor-pointer top-4 right-4 w-12 h-12 flex items-center justify-center bg-black/50 rounded-full hover:bg-black/70 transition-opacity text-2xl z-20 backdrop-blur-sm"
         >
-          ⏸
+          <Pause />
         </button>
       )}
       <audio ref={audioRef} src={audioSrc} />

@@ -4,6 +4,7 @@ import Nav from "@/components/nav";
 import type { Metadata } from "next";
 import {
   Anta,
+  Bebas_Neue,
   Geist,
   Geist_Mono,
   Inter,
@@ -16,6 +17,12 @@ import "./globals.css";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
+});
+
+const bebasNeue = Bebas_Neue({
+  variable: "--font-bebas-neue",
+  subsets: ["latin"],
+  weight: ["400"],
 });
 
 const rationale = Turret_Road({
@@ -64,7 +71,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} ${rationale.variable} ${anta.variable} ${sarpanch.variable} ${inter.variable} ${quicksand.variable} antialiased w-5/6 m-auto`}
+        className={`${geistSans.variable} ${geistMono.variable} ${rationale.variable} ${anta.variable} ${sarpanch.variable} ${inter.variable} ${quicksand.variable} ${bebasNeue.variable} antialiased m-auto textured-background`}
       >
         <Nav />
         {children}

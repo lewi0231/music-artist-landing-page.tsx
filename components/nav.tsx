@@ -18,7 +18,7 @@ export default function Nav({ className }: { className?: string }) {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: -20 }}
           transition={{ duration: 0.3, ease: "easeInOut" }}
-          className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-sm"
+          className="fixed top-0 left-0 right-0 z-50 bg-background/0 "
         >
           <div className="w-5/6 mx-auto">
             <nav className="flex flex-col ">

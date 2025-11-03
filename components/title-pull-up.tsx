@@ -44,7 +44,7 @@ export default function TitlePullUp({
           return (
             <div key={index} className="overflow-hidden">
               <motion.div
-                className="sm:text-[6rem] md:text-[7.5rem] lg:text-[10rem] xl:text-[13rem] text-start tracking-narrow bg-clip-text text-transparent bg-[url('/seabirds-background.jpg')] bg-cover bg-center sm:-ml-2 transition-all duration-500 text-[4rem]"
+                className="sm:text-[6rem] md:text-[7.5rem] lg:text-[11rem] xl:text-[13rem] text-start tracking-narrow bg-clip-text text-foreground bg-cover bg-center sm:-ml-2 transition-all duration-500 text-[4rem] font-inter"
                 style={{
                   lineHeight: 1,
                 }}

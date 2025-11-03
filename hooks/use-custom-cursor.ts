@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 
 // Smoothing factor for cursor movement
-const SPEED = 0.17;
+const SPEED = 0.15;
 
 export function useCursor(cursorRef: React.RefObject<HTMLElement | null>) {
   const [isPointer, setIsPointer] = useState(false);
@@ -57,11 +57,16 @@ export function useCursor(cursorRef: React.RefObject<HTMLElement | null>) {
 
       const hoverScale = isPointerRef.current ? 1.25 : 1;
 
+      // Calculate stretch direction based on movement angle
+      const stretchAngle = (Math.atan2(dy, dx) * 180) / Math.PI;
+      const stretchX = Math.cos((stretchAngle * Math.PI) / 180) * scale.current;
+      const stretchY = Math.sin((stretchAngle * Math.PI) / 180) * scale.current;
+
       // Apply transforms directly to the DOM element
       const transform = `
         translate(${circlePosition.current.x}px, ${circlePosition.current.y}px) 
-        scale(${(1 + scale.current) * hoverScale}, ${
-        (1 - scale.current) * hoverScale
+        scale(${(1 + Math.abs(stretchX)) * hoverScale}, ${
+        (1 + Math.abs(stretchY)) * hoverScale
       }) 
         rotate(${angle.current}deg)
       `;
@@ -86,6 +91,7 @@ export function useCursor(cursorRef: React.RefObject<HTMLElement | null>) {
       const isClickable =
         target.tagName === "A" ||
         target.tagName === "BUTTON" ||
+        target.tagName === "IFRAME" ||
         target.getAttribute("role") === "button" ||
         window.getComputedStyle(target).cursor === "pointer";
 
@@ -99,15 +105,12 @@ export function useCursor(cursorRef: React.RefObject<HTMLElement | null>) {
     animationFrameId = requestAnimationFrame(animate);
 
     window.addEventListener("mousemove", handleMouseMove);
-    document.documentElement.addEventListener("mouseleave", handleMouseLeave);
+    window.addEventListener("mouseleave", handleMouseLeave);
 
     return () => {
       cancelAnimationFrame(animationFrameId);
       window.removeEventListener("mousemove", handleMouseMove);
-      document.documentElement.removeEventListener(
-        "mouseleave",
-        handleMouseLeave
-      );
+      window.removeEventListener("mouseleave", handleMouseLeave);
     };
   }, [cursorRef]);
 

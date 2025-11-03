@@ -1,33 +1,34 @@
 import AnimatedSeparator from "./animated-separator";
 import AudioPlayWrapper from "./audio-play-wrapper";
+import Icon, { IconName } from "./icon";
 import ImagePullUpWrapper from "./image-pull-up-wrapper";
 import WordsPullUp from "./word-pull-up";
 
 export default function Section({
   children,
-  sectionIndex,
   title,
   weirdIdentifier,
   audioSrc,
   id,
+  iconName,
 }: {
   children: React.ReactNode;
-  sectionIndex: string;
   title: string;
   weirdIdentifier: string;
   audioSrc: string;
   id?: string;
+  iconName: IconName;
 }) {
   return (
-    <section className="mb-20 md:mb-40" id="music">
+    <section className="mb-20 md:mb-40 w-5/6 mx-auto" id={id}>
       <AnimatedSeparator />
       <div className="relative md:pt-10">
         {/* Mobile: flex-col layout, Desktop: grid layout */}
         <div className="flex flex-col md:grid md:grid-cols-5 md:gap-4">
           {/* Section Index */}
           <div className="md:col-span-2 flex flex-col items-start">
-            <div className="text-5xl sm:text-7xl md:text-8xl font-mono font-light leading-16 sm:leading-24 transition-all duration-500 py-2 ">
-              {sectionIndex}
+            <div className="text-5xl sm:text-7xl md:text-8xl font-mono font-light leading-16 sm:leading-24 transition-all duration-500 py-2">
+              <Icon name={iconName} className="w-40 h-40" strokeWidth={0.8} />
             </div>
             {/* Bottom left elements (visible on desktop) */}
             <div className="hidden md:grid grid-cols-3 h-full w-full">
@@ -42,12 +43,16 @@ export default function Section({
             </div>
           </div>
 
-          {/* Image */}
+          {/* Image / Content */}
           <div className="md:col-span-3">
             <ImagePullUpWrapper delay={0.5}>
-              <AudioPlayWrapper audioSrc={audioSrc}>
-                {children}
-              </AudioPlayWrapper>
+              {audioSrc ? (
+                <AudioPlayWrapper audioSrc={audioSrc}>
+                  {children}
+                </AudioPlayWrapper>
+              ) : (
+                children
+              )}
             </ImagePullUpWrapper>
           </div>
         </div>
@@ -66,7 +71,7 @@ export default function Section({
             <WordsPullUp text="&#x21B3;" delay={0.75} />
           </div>
           <div className="flex items-end justify-end">
-            <div className=" whitespace-nowrap font-thin my-4 text-xs transition-all duration-500">
+            <div className="whitespace-nowrap font-thin my-4 text-xs transition-all duration-500">
               <WordsPullUp text={weirdIdentifier} delay={0.75} />
             </div>
           </div>

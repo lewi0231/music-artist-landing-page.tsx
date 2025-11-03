@@ -17,7 +17,7 @@ export default function Hero() {
             <WordsPullUp text="Selected Tracks" delay={1} className="" />
           </div>
           <div className="col-span-1">
-            <WordsPullUp text="DS-3" delay={1} className="text-right" />
+            <WordsPullUp text="PETREL" delay={1} className="text-right" />
           </div>
         </div>
       </div>

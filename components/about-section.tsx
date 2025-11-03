@@ -1,27 +1,16 @@
 import { cn } from "@/lib/utils";
 import AnimatedSeparator from "./animated-separator";
-import AudioPlayWrapper from "./audio-play-wrapper";
 import Icon, { IconName } from "./icon";
-import ImagePullUpWrapper from "./image-pull-up-wrapper";
 import WordsPullUp from "./word-pull-up";
 
-export default function Section({
-  children,
-  title,
-  weirdIdentifier,
-  audioSrc,
-  id,
-  iconName,
-}: {
-  children: React.ReactNode;
-  title: string;
-  weirdIdentifier: string;
-  audioSrc?: string;
-  id?: string;
+type AboutProps = {
   iconName: IconName;
-}) {
+  weirdIdentifier: string;
+};
+
+const AboutSection = ({ iconName, weirdIdentifier }: AboutProps) => {
   return (
-    <section className="mb-20 md:mb-40 w-5/6 mx-auto" id={id}>
+    <section className="mb-20 md:mb-40 w-5/6 mx-auto h-screen" id="about">
       <AnimatedSeparator />
       <div className="relative md:pt-10">
         {/* Mobile: flex-col layout, Desktop: grid layout */}
@@ -40,27 +29,30 @@ export default function Section({
             {/* Bottom left elements (visible on desktop) */}
             <div className="hidden md:grid grid-cols-3 h-full w-full">
               <div className="col-span-1 flex items-end justify-start">
-                <div className="-rotate-90 whitespace-nowrap font-thin mb-4 -ml-4 sm:text-sm text-xs transition-all duration-500">
+                <div className="-rotate-90 whitespace-nowrap font-thin my-4 sm:text-sm text-xs transition-all duration-500">
                   <WordsPullUp text={weirdIdentifier} delay={0.75} />
                 </div>
               </div>
-              <div className="col-span-1 lg:text-6xl flex items-end justify-end sm:text-3xl text-2xl transition-all duration-500">
+              <div className="col-span-1 lg:text-5xl flex items-end justify-end sm:text-3xl text-2xl transition-all duration-500">
                 <WordsPullUp text="&#x27B3;" delay={0.75} />
               </div>
             </div>
           </div>
 
           {/* Image / Content */}
-          <div className="md:col-span-3">
-            <ImagePullUpWrapper delay={0.5}>
-              {audioSrc ? (
-                <AudioPlayWrapper audioSrc={audioSrc}>
-                  {children}
-                </AudioPlayWrapper>
-              ) : (
-                children
-              )}
-            </ImagePullUpWrapper>
+          <div className="md:col-span-3 tracking-wider leading-loose">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptates
+            neque voluptatibus, odit molestias molestiae necessitatibus
+            asperiores quae incidunt laudantium facere facilis magni quia
+            aperiam error! Quae, inventore fugit? Iure dolore nisi magni veniam
+            adipisci vero optio explicabo quas voluptatum delectus fugit ipsam
+            aut quis possimus quibusdam amet porro, similique atque repellendus
+            in praesentium. Cumque, sapiente distinctio libero nihil veritatis
+            rerum quidem quasi mollitia modi ad nobis doloremque sed tenetur
+            excepturi vel inventore neque. Suscipit, sed beatae aliquid,
+            reiciendis quo tenetur consequuntur dignissimos quidem, quibusdam
+            quisquam error reprehenderit sunt quod! Deleniti earum accusamus,
+            quibusdam nostrum eaque possimus maiores animi aperiam placeat!
           </div>
         </div>
 
@@ -68,14 +60,14 @@ export default function Section({
         <div className="flex flex-col md:grid md:grid-cols-5 md:gap-4 md:mt-4">
           <div className="hidden md:block md:col-span-2"></div>
           <div className="md:col-span-3 text-[3rem] sm:text-[5rem] md:text-[5rem] lg:text-[6rem] xl:text-[7rem] flex items-end leading-14 sm:leading-24 md:leading-24 lg:leading-28 xl:leading-32 md:tracking-normal transition-all duration-500 tracking-wide py-4">
-            <WordsPullUp text={title} delay={0.75} />
+            <WordsPullUp text={"About"} delay={0.75} />
           </div>
         </div>
 
         {/* Bottom corner elements (visible on mobile) */}
         <div className="md:hidden grid grid-cols-2 sm:gap-4 sm:mt-4">
           <div className="flex items-end justify-start text-2xl transition-all duration-500">
-            <WordsPullUp text="&#x21B3;" delay={0.75} />
+            <WordsPullUp text="&#x27B3;" delay={0.75} />
           </div>
           <div className="flex items-end justify-end">
             <div className="whitespace-nowrap font-thin my-4 text-xs transition-all duration-500">
@@ -86,4 +78,6 @@ export default function Section({
       </div>
     </section>
   );
-}
+};
+
+export default AboutSection;

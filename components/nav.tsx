@@ -37,7 +37,9 @@ export default function Nav({ className }: { className?: string }) {
                     className
                   )}
                 >
-                  <FlickNavItem>About</FlickNavItem>
+                  <FlickNavItem>
+                    <Link href="#about">About</Link>
+                  </FlickNavItem>
                   <FlickNavItem>
                     <Link href="#music">Music</Link>
                   </FlickNavItem>

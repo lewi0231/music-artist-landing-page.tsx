@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 
+import AboutSection from "@/components/about-section";
 import ParallaxSection from "@/components/parallax-section";
 import Section from "@/components/section";
 import Hero from "../components/hero";
@@ -52,7 +53,7 @@ export default function Home() {
         <ParallaxSection tracks={tracks} />
         <Section
           id="music"
-          weirdIdentifier="PLP828"
+          weirdIdentifier="FULMAR"
           title="Ignition"
           audioSrc="/ignition.mp3"
           iconName="CarFront"
@@ -67,7 +68,7 @@ export default function Home() {
         </Section>
         <Section
           title={"Singing Into Clouds"}
-          weirdIdentifier={"LEWI0231"}
+          weirdIdentifier={"GANNET"}
           audioSrc="/singing_into_clouds.mp3"
           iconName="Speaker"
         >
@@ -79,6 +80,7 @@ export default function Home() {
             className="w-full h-auto aspect-auto opacity-75 rounded-2xl"
           />
         </Section>
+        <AboutSection iconName="Bird" weirdIdentifier="PUFFIN" />
       </main>
     </div>
   );

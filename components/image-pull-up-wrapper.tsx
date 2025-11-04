@@ -46,7 +46,11 @@ export default function ImagePullUpWrapper({
         variants={containerVariants}
       >
         <div className="overflow-hidden">
-          <motion.div className={cn(className)} variants={imageVariants}>
+          <motion.div
+            className={cn(className)}
+            variants={imageVariants}
+            style={{ willChange: "transform" }}
+          >
             {children}
           </motion.div>
         </div>

@@ -46,7 +46,11 @@ export default function WordsPullUp({
         variants={containerVariants}
       >
         <div className="overflow-hidden">
-          <motion.div className={cn(className)} variants={wordVariants}>
+          <motion.div
+            className={cn(className)}
+            variants={wordVariants}
+            style={{ willChange: "transform" }}
+          >
             {text}
           </motion.div>
         </div>

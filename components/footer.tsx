@@ -16,6 +16,7 @@ function Footer() {
             onClick={scrollToTop}
             data-pointer
             className="hover:text-foreground transition-colors uppercase cursor-pointer"
+            aria-label="Navigate to Top"
           >
             Back To Top
           </button>

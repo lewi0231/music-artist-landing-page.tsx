@@ -16,6 +16,11 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "Decoding Seabirds",
   description: "Musical artist with sample tracks",
+  viewport: {
+    width: "device-width",
+    initialScale: 1,
+    maximumScale: 5,
+  },
 };
 
 export default function RootLayout({

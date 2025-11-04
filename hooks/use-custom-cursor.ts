@@ -3,6 +3,17 @@ import { useEffect, useRef, useState } from "react";
 // Smoothing factor for cursor movement
 const SPEED = 0.15;
 
+// Check if device is mobile/touch device
+const isMobileDevice = () => {
+  if (typeof window === "undefined") return false;
+  return (
+    "ontouchstart" in window ||
+    navigator.maxTouchPoints > 0 ||
+    // @ts-expect-error - legacy check
+    navigator.msMaxTouchPoints > 0
+  );
+};
+
 export function useCursor(cursorRef: React.RefObject<HTMLElement | null>) {
   const [isPointer, setIsPointer] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
@@ -20,15 +31,35 @@ export function useCursor(cursorRef: React.RefObject<HTMLElement | null>) {
   const scale = useRef(0);
   const angle = useRef(0);
 
+  // Track if mouse is moving (for throttling)
+  const isMoving = useRef(false);
+  const lastMoveTime = useRef(0);
+
   useEffect(() => {
+    // Disable custom cursor on mobile devices to reduce main thread work
+    if (isMobileDevice()) {
+      return;
+    }
+
     let animationFrameId: number;
+    let lastUpdateTime = 0;
+    const throttleMs = 16; // ~60fps
 
     // Animation loop - runs continuously via requestAnimationFrame
-    const animate = () => {
+    const animate = (currentTime: number) => {
       if (!cursorRef.current) {
         animationFrameId = requestAnimationFrame(animate);
         return;
       }
+
+      // Throttle updates when not moving significantly
+      const timeSinceLastUpdate = currentTime - lastUpdateTime;
+      if (!isMoving.current && timeSinceLastUpdate < throttleMs * 2) {
+        animationFrameId = requestAnimationFrame(animate);
+        return;
+      }
+
+      lastUpdateTime = currentTime;
 
       // Smooth cursor position following
       circlePosition.current.x +=
@@ -80,7 +111,17 @@ export function useCursor(cursorRef: React.RefObject<HTMLElement | null>) {
 
     // Update mouse position on move
     const handleMouseMove = (e: MouseEvent) => {
+      const now = Date.now();
       mousePosition.current = { x: e.clientX, y: e.clientY };
+
+      // Track movement for throttling
+      if (now - lastMoveTime.current > 50) {
+        isMoving.current = true;
+        setTimeout(() => {
+          isMoving.current = false;
+        }, 100);
+      }
+      lastMoveTime.current = now;
 
       // Make visible when mouse moves (React will bail out if already true)
       setIsVisible(true);

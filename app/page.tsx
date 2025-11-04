@@ -1,9 +1,14 @@
+import dynamic from "next/dynamic";
 import Image from "next/image";
 
 import AboutSection from "@/components/about-section";
-import ParallaxSection from "@/components/parallax-section";
 import Section from "@/components/section";
 import Hero from "../components/hero";
+
+// Lazy load ParallaxSection since it's below the fold and heavy
+const ParallaxSection = dynamic(() => import("@/components/parallax-section"), {
+  ssr: true, // Still SSR for SEO, but code-split
+});
 
 const tracks = [
   {
@@ -62,7 +67,7 @@ export default function Home() {
             width={800}
             height={500}
             sizes="(max-width: 768px) 100vw, 661px"
-            quality={75}
+            quality={70}
             loading="lazy"
             className="w-full h-auto aspect-auto opacity-75 rounded-2xl"
           />
@@ -79,7 +84,7 @@ export default function Home() {
             width={1920}
             height={1080}
             sizes="(max-width: 768px) 100vw, 661px"
-            quality={75}
+            quality={70}
             loading="lazy"
             className="w-full h-auto aspect-auto opacity-75 rounded-2xl"
           />

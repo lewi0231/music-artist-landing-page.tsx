@@ -187,14 +187,38 @@ export default function ParallaxSection({ tracks }: ParallaxSectionProps) {
   );
 
   useEffect(() => {
-    const unsubscribe = textureOpacity.on("change", (latest) => {
-      document.documentElement.style.setProperty(
-        "--texture-opacity",
-        latest.toString()
-      );
-    });
+    let rafId: number | null = null;
+    let lastValue = 0.15;
 
-    return () => unsubscribe();
+    const updateOpacity = (value: number) => {
+      // Throttle updates to reduce forced reflows, especially on mobile
+      if (Math.abs(value - lastValue) > 0.01) {
+        document.documentElement.style.setProperty(
+          "--texture-opacity",
+          value.toString()
+        );
+        lastValue = value;
+      }
+    };
+
+    const handleChange = () => {
+      if (rafId !== null) return; // Already queued
+
+      rafId = requestAnimationFrame(() => {
+        const latest = textureOpacity.get();
+        updateOpacity(latest);
+        rafId = null;
+      });
+    };
+
+    const unsubscribe = textureOpacity.on("change", handleChange);
+
+    return () => {
+      unsubscribe();
+      if (rafId !== null) {
+        cancelAnimationFrame(rafId);
+      }
+    };
   }, [textureOpacity]);
 
   // Background layer transforms for albatross image
@@ -229,7 +253,7 @@ export default function ParallaxSection({ tracks }: ParallaxSectionProps) {
           alt="Albatross Background Image Made from Letters"
           fill
           sizes="100vw"
-          quality={75}
+          quality={70}
           loading="lazy"
           className="opacity-28 object-contain"
         />

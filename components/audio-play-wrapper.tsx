@@ -71,6 +71,7 @@ export default function AudioPlayWrapper({
           onClick={togglePlay}
           data-pointer
           className="absolute cursor-pointer inset-0 flex h-full items-center justify-center bg-black/50 rounded-2xl opacity-0 group-hover:opacity-50 transition-opacity duration-500 text-3xl z-10"
+          aria-label="Play Button"
         >
           <Play />
         </button>
@@ -81,6 +82,7 @@ export default function AudioPlayWrapper({
           onClick={togglePlay}
           data-pointer
           className="absolute cursor-pointer top-4 right-4 w-12 h-12 flex items-center justify-center bg-black/50 rounded-full hover:bg-black/70 transition-opacity text-2xl z-20 backdrop-blur-sm"
+          aria-label="Pause Button"
         >
           <Pause />
         </button>

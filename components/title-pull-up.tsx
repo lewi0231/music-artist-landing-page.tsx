@@ -61,10 +61,11 @@ export default function TitlePullUp({
 
       {/* Animated text that covers the static version */}
       <motion.div
-        className="  absolute top-0 left-0 w-full"
+        className="absolute top-0 left-0 w-full"
         animate={"animate"}
         initial={"initial"}
         variants={containerVariants}
+        style={{ willChange: "transform" }}
       >
         {words.map((word, index) => {
           return (
@@ -73,6 +74,7 @@ export default function TitlePullUp({
                 className="sm:text-[6rem] md:text-[7.5rem] lg:text-[11rem] xl:text-[13rem] text-start tracking-narrow bg-clip-text text-foreground bg-cover bg-center sm:-ml-2 transition-all duration-500 text-[4rem] font-inter"
                 style={{
                   lineHeight: 1,
+                  willChange: "transform",
                 }}
                 variants={wordVariants}
               >
@@ -87,6 +89,7 @@ export default function TitlePullUp({
             className="sm:text-[6rem] md:text-[7.5rem] lg:text-[10rem] xl:text-[13rem] text-start tracking-narrow bg-clip-text text-transparent bg-[url('/seabirds-background.jpg')] bg-cover bg-center sm:-ml-2 transition-all duration-500 text-[4rem]"
             style={{
               lineHeight: 1,
+              willChange: "transform",
             }}
             variants={wordVariants}
           >

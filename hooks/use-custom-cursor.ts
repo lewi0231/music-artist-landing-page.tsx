@@ -72,7 +72,7 @@ export function useCursor(cursorRef: React.RefObject<HTMLElement | null>) {
       `;
 
       cursorRef.current.style.transform = transform;
-      cursorRef.current.style.transition = "transform .03s ease-in-out 0s";
+      // cursorRef.current.style.transition = "transform .03s ease-in-out 0s";
 
       // Continue the animation loop
 
@@ -89,11 +89,11 @@ export function useCursor(cursorRef: React.RefObject<HTMLElement | null>) {
       // Check if element is clickable
       const target = e.target as HTMLElement;
       const isClickable =
-        // target.tagName === "A" ||
-        // target.tagName === "BUTTON" ||
-        // target.tagName === "IFRAME" ||
-        // target.getAttribute("role") === "button" ||
         target.hasAttribute("data-pointer") ||
+        target.tagName === "A" ||
+        target.tagName === "BUTTON" ||
+        target.tagName === "IFRAME" ||
+        target.getAttribute("role") === "button" ||
         target.closest("[data-pointer]") !== null;
 
       isPointerRef.current = isClickable;

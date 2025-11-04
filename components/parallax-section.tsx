@@ -229,7 +229,8 @@ export default function ParallaxSection({ tracks }: ParallaxSectionProps) {
           alt="Albatross Background Image Made from Letters"
           fill
           sizes="100vw"
-          quality={70}
+          quality={75}
+          loading="lazy"
           className="opacity-28 object-contain"
         />
       </motion.div>

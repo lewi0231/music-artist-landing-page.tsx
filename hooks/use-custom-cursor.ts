@@ -63,19 +63,18 @@ export function useCursor(cursorRef: React.RefObject<HTMLElement | null>) {
       const stretchY = Math.sin((stretchAngle * Math.PI) / 180) * scale.current;
 
       // Apply transforms directly to the DOM element
-      const transform = `
-        translate(${circlePosition.current.x}px, ${circlePosition.current.y}px) 
-        scale(${(1 + Math.abs(stretchX)) * hoverScale}, ${
+      const transform = `translate(${circlePosition.current.x}px, ${
+        circlePosition.current.y
+      }px) scale(${(1 + Math.abs(stretchX)) * hoverScale}, ${
         (1 + Math.abs(stretchY)) * hoverScale
-      }) 
-        rotate(${angle.current}deg)
-      `;
+      }) rotate(${angle.current}deg)`;
 
-      cursorRef.current.style.transform = transform;
-      // cursorRef.current.style.transition = "transform .03s ease-in-out 0s";
+      if (cursorRef.current) {
+        cursorRef.current.style.transform = transform;
+        cursorRef.current.style.willChange = "transform";
+      }
 
       // Continue the animation loop
-
       animationFrameId = requestAnimationFrame(animate);
     };
 
@@ -109,7 +108,9 @@ export function useCursor(cursorRef: React.RefObject<HTMLElement | null>) {
     window.addEventListener("mouseleave", handleMouseLeave);
 
     return () => {
-      cancelAnimationFrame(animationFrameId);
+      if (animationFrameId) {
+        cancelAnimationFrame(animationFrameId);
+      }
       window.removeEventListener("mousemove", handleMouseMove);
       window.removeEventListener("mouseleave", handleMouseLeave);
     };

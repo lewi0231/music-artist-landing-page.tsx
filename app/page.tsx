@@ -62,7 +62,8 @@ export default function Home() {
             width={800}
             height={500}
             sizes="(max-width: 768px) 100vw, 661px"
-            quality={70}
+            quality={75}
+            loading="lazy"
             className="w-full h-auto aspect-auto opacity-75 rounded-2xl"
           />
         </Section>
@@ -78,7 +79,8 @@ export default function Home() {
             width={1920}
             height={1080}
             sizes="(max-width: 768px) 100vw, 661px"
-            quality={70}
+            quality={75}
+            loading="lazy"
             className="w-full h-auto aspect-auto opacity-75 rounded-2xl"
           />
         </Section>

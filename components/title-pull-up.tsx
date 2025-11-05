@@ -36,7 +36,7 @@ export default function TitlePullUp({
     <div className="relative">
       {/* Static text for LCP - invisible but present in DOM */}
       <div
-        className="relative opacity-100 md:opacity-0 pointer-events-none"
+        className="relative opacity-0 pointer-events-none"
         aria-hidden="true"
       >
         {words.map((word, index) => (
@@ -61,7 +61,7 @@ export default function TitlePullUp({
 
       {/* Animated text that covers the static version */}
       <motion.div
-        className="absolute top-0 left-0 w-full hidden md:block"
+        className="absolute top-0 left-0 w-full"
         animate={"animate"}
         initial={"initial"}
         variants={containerVariants}

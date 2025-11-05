@@ -112,17 +112,5 @@
   position: relative;
 }
 
-.textured-background::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  background-image: url("/seabirds-background.jpg");
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  pointer-events: none;
-  z-index: 0;
-  mix-blend-mode: soft-light;
-  opacity: var(--texture-opacity, 0.15);
-  transition: opacity 0.3s ease-out;
-}
+/* Background image is now handled by OptimizedBackground component 
+   using Next.js Image for better mobile optimization */

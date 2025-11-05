@@ -1,7 +1,8 @@
 import CustomCursor from "@/components/custom-cursor";
 import Footer from "@/components/footer";
 import Nav from "@/components/nav";
-import type { Metadata } from "next";
+import OptimizedBackground from "@/components/optimized-background";
+import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
@@ -16,11 +17,12 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "Decoding Seabirds",
   description: "Musical artist with sample tracks",
-  viewport: {
-    width: "device-width",
-    initialScale: 1,
-    maximumScale: 5,
-  },
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
 };
 
 export default function RootLayout({
@@ -37,18 +39,11 @@ export default function RootLayout({
         <link rel="preconnect" href="https://widget.sndcdn.com" />
         <link rel="preconnect" href="https://i1.sndcdn.com" />
         <link rel="dns-prefetch" href="https://w.soundcloud.com" />
-
-        {/* Preload critical background image */}
-        <link
-          rel="preload"
-          href="/seabirds-background.jpg"
-          as="image"
-          type="image/jpeg"
-        />
       </head>
       <body
         className={` ${inter.variable}  antialiased m-auto textured-background`}
       >
+        <OptimizedBackground />
         <Nav />
         {children}
         <CustomCursor />

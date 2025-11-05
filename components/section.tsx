@@ -28,7 +28,7 @@ export default function Section({
         <div className="flex flex-col md:grid md:grid-cols-5 md:gap-4">
           {/* Section Index */}
           <div className="md:col-span-2 flex flex-col items-start">
-            <div className="text-5xl sm:text-7xl md:text-8xl font-mono font-light leading-16 sm:leading-24 transition-all duration-500 py-2">
+            <div className="text-5xl sm:text-7xl md:text-8xl font-mono font-light leading-16 sm:leading-24 transition-all duration-500 py-4 sm:py-2">
               <Icon
                 name={iconName}
                 className={cn(
@@ -75,10 +75,10 @@ export default function Section({
         {/* Bottom corner elements (visible on mobile) */}
         <div className="md:hidden grid grid-cols-2 sm:gap-4 sm:mt-4">
           <div className="flex items-end justify-start text-2xl transition-all duration-500">
-            <WordsPullUp text="&#x21B3;" delay={0.75} />
+            <WordsPullUp text="&#x27B3;" delay={0.75} />
           </div>
           <div className="flex items-end justify-end">
-            <div className="whitespace-nowrap font-thin my-4 text-xs transition-all duration-500">
+            <div className="whitespace-nowrap mb-2 font-thin text-xs transition-all duration-500">
               <WordsPullUp text={weirdIdentifier} delay={0.75} />
             </div>
           </div>

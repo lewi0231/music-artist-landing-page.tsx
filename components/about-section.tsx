@@ -11,14 +11,14 @@ type AboutProps = {
 
 const AboutSection = ({ iconName, weirdIdentifier }: AboutProps) => {
   return (
-    <section className="mb-20 md:mb-40 w-5/6 mx-auto h-screen" id="about">
+    <section className="mb-20 md:mb-40 w-5/6 mx-auto min-h-screen" id="about">
       <AnimatedSeparator />
       <div className="relative md:pt-10">
         {/* Mobile: flex-col layout, Desktop: grid layout */}
         <div className="flex flex-col md:grid md:grid-cols-5 md:gap-4">
           {/* Section Index */}
           <div className="md:col-span-2 flex flex-col items-start">
-            <div className="text-5xl sm:text-7xl md:text-8xl font-mono font-light leading-16 sm:leading-24 transition-all duration-500 py-2">
+            <div className="text-5xl sm:text-7xl md:text-8xl font-mono font-light leading-16 sm:leading-24 transition-all duration-500 py-4 sm:py-2">
               <Icon
                 name={iconName}
                 className={cn(
@@ -74,7 +74,7 @@ const AboutSection = ({ iconName, weirdIdentifier }: AboutProps) => {
             <WordsPullUp text="&#x27B3;" delay={0.75} />
           </div>
           <div className="flex items-end justify-end">
-            <div className="whitespace-nowrap font-thin my-4 text-xs transition-all duration-500">
+            <div className="whitespace-nowrap font-thin mb-2 text-xs transition-all duration-500">
               <WordsPullUp text={weirdIdentifier} delay={0.75} />
             </div>
           </div>

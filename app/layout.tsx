@@ -4,6 +4,7 @@ import Nav from "@/components/nav";
 import OptimizedBackground from "@/components/optimized-background";
 import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
 
 const inter = Inter({
@@ -49,11 +50,11 @@ export default function RootLayout({
         <Footer />
 
         {/* Load SoundCloud API script with defer for better performance */}
-        {/* <Script
+        <Script
           src="https://w.soundcloud.com/player/api.js"
           strategy="lazyOnload"
           crossOrigin="anonymous"
-        /> */}
+        />
       </body>
     </html>
   );

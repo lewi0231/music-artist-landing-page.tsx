@@ -1,18 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 
 // Smoothing factor for cursor movement
-const SPEED = 0.15;
-
-// Check if device is mobile/touch device
-const isMobileDevice = () => {
-  if (typeof window === "undefined") return false;
-  return (
-    "ontouchstart" in window ||
-    navigator.maxTouchPoints > 0 ||
-    // @ts-expect-error - legacy check
-    navigator.msMaxTouchPoints > 0
-  );
-};
+const SPEED = 0.08;
 
 export function useCursor(cursorRef: React.RefObject<HTMLElement | null>) {
   const [isPointer, setIsPointer] = useState(false);
@@ -31,35 +20,15 @@ export function useCursor(cursorRef: React.RefObject<HTMLElement | null>) {
   const scale = useRef(0);
   const angle = useRef(0);
 
-  // Track if mouse is moving (for throttling)
-  const isMoving = useRef(false);
-  const lastMoveTime = useRef(0);
-
   useEffect(() => {
-    // Disable custom cursor on mobile devices to reduce main thread work
-    if (isMobileDevice()) {
-      return;
-    }
-
     let animationFrameId: number;
-    let lastUpdateTime = 0;
-    const throttleMs = 16; // ~60fps
 
     // Animation loop - runs continuously via requestAnimationFrame
-    const animate = (currentTime: number) => {
+    const animate = () => {
       if (!cursorRef.current) {
         animationFrameId = requestAnimationFrame(animate);
         return;
       }
-
-      // Throttle updates when not moving significantly
-      const timeSinceLastUpdate = currentTime - lastUpdateTime;
-      if (!isMoving.current && timeSinceLastUpdate < throttleMs * 2) {
-        animationFrameId = requestAnimationFrame(animate);
-        return;
-      }
-
-      lastUpdateTime = currentTime;
 
       // Smooth cursor position following
       circlePosition.current.x +=
@@ -94,34 +63,25 @@ export function useCursor(cursorRef: React.RefObject<HTMLElement | null>) {
       const stretchY = Math.sin((stretchAngle * Math.PI) / 180) * scale.current;
 
       // Apply transforms directly to the DOM element
-      const transform = `translate(${circlePosition.current.x}px, ${
-        circlePosition.current.y
-      }px) scale(${(1 + Math.abs(stretchX)) * hoverScale}, ${
+      const transform = `
+        translate(${circlePosition.current.x}px, ${circlePosition.current.y}px) 
+        scale(${(1 + Math.abs(stretchX)) * hoverScale}, ${
         (1 + Math.abs(stretchY)) * hoverScale
-      }) rotate(${angle.current}deg)`;
+      }) 
+        rotate(${angle.current}deg)
+      `;
 
-      if (cursorRef.current) {
-        cursorRef.current.style.transform = transform;
-        cursorRef.current.style.willChange = "transform";
-      }
+      cursorRef.current.style.transform = transform;
+      cursorRef.current.style.transition = "transform .03s ease-in-out 0s";
 
       // Continue the animation loop
+
       animationFrameId = requestAnimationFrame(animate);
     };
 
     // Update mouse position on move
     const handleMouseMove = (e: MouseEvent) => {
-      const now = Date.now();
       mousePosition.current = { x: e.clientX, y: e.clientY };
-
-      // Track movement for throttling
-      if (now - lastMoveTime.current > 50) {
-        isMoving.current = true;
-        setTimeout(() => {
-          isMoving.current = false;
-        }, 100);
-      }
-      lastMoveTime.current = now;
 
       // Make visible when mouse moves (React will bail out if already true)
       setIsVisible(true);
@@ -129,12 +89,11 @@ export function useCursor(cursorRef: React.RefObject<HTMLElement | null>) {
       // Check if element is clickable
       const target = e.target as HTMLElement;
       const isClickable =
-        target.hasAttribute("data-pointer") ||
         target.tagName === "A" ||
         target.tagName === "BUTTON" ||
         target.tagName === "IFRAME" ||
         target.getAttribute("role") === "button" ||
-        target.closest("[data-pointer]") !== null;
+        window.getComputedStyle(target).cursor === "pointer";
 
       isPointerRef.current = isClickable;
       setIsPointer(isClickable);
@@ -149,13 +108,11 @@ export function useCursor(cursorRef: React.RefObject<HTMLElement | null>) {
     window.addEventListener("mouseleave", handleMouseLeave);
 
     return () => {
-      if (animationFrameId) {
-        cancelAnimationFrame(animationFrameId);
-      }
+      cancelAnimationFrame(animationFrameId);
       window.removeEventListener("mousemove", handleMouseMove);
       window.removeEventListener("mouseleave", handleMouseLeave);
     };
-  }, [cursorRef]);
+  }, []);
 
   return { isPointer, isVisible };
 }

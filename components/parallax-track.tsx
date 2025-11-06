@@ -55,7 +55,7 @@ export default function ParallaxTrack({
   const isMobile = useIsMobile();
   const trackRef = useRef(null);
   const iframeRef = useRef<HTMLIFrameElement | null>(null);
-  const isInView = useInView(trackRef, { once: true, margin: "100px" });
+  const isInView = useInView(trackRef, { once: true, margin: "200px" });
 
   // Calculate transforms based on config
   const yOutput = config.parallax.y.map((v) => v * parallaxMultiplier);

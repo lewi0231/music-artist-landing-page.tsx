@@ -112,6 +112,7 @@ export function useCursor(cursorRef: React.RefObject<HTMLElement | null>) {
       window.removeEventListener("mousemove", handleMouseMove);
       window.removeEventListener("mouseleave", handleMouseLeave);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return { isPointer, isVisible };

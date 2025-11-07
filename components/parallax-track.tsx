@@ -19,18 +19,24 @@ interface ParallaxTrackProps {
   scrollYProgress: MotionValue<number>;
   parallaxMultiplier: number;
   index: number;
+  getWidget: (
+    index: number,
+    iframe: HTMLIFrameElement | null
+  ) => SoundCloudWidget | null;
 }
 
-// SoundCloud Widget API types
+// SoundCloud Widget API types (shared with parent)
+type SoundCloudWidget = {
+  toggle: () => void;
+  play: () => void;
+  pause: () => void;
+  bind: (event: string, callback: () => void) => void;
+};
+
 declare global {
   interface Window {
     SC?: {
-      Widget: (iframe: HTMLIFrameElement) => {
-        toggle: () => void;
-        play: () => void;
-        pause: () => void;
-        bind: (event: string, callback: () => void) => void;
-      };
+      Widget: (iframe: HTMLIFrameElement) => SoundCloudWidget;
     };
   }
 }
@@ -51,6 +57,8 @@ export default function ParallaxTrack({
   config,
   scrollYProgress,
   parallaxMultiplier,
+  index,
+  getWidget,
 }: ParallaxTrackProps) {
   const isMobile = useIsMobile();
   const trackRef = useRef(null);
@@ -89,28 +97,23 @@ export default function ParallaxTrack({
   const handleTrackClick = () => {
     const iframe = iframeRef.current;
 
-    console.debug("Track clicked:", {
-      hasIframe: !!iframe,
-      hasWindowSC: typeof window.SC !== "undefined",
-      windowSC: window.SC,
-    });
-
     if (!iframe) {
       console.warn("No iframe reference");
       return;
     }
 
-    if (typeof window.SC === "undefined") {
-      console.warn("Souncloud API not loaded yet");
+    // Get widget from parent manager (reuses existing instance)
+    const widget = getWidget(index, iframe);
+
+    if (!widget) {
+      console.warn("Widget not available yet (API may still be loading)");
       return;
     }
 
     try {
-      const widget = window.SC.Widget(iframe);
-      console.log("Widget created:", widget);
       widget.toggle();
     } catch (error) {
-      console.error("Error creating soundcloud widget or toggling", error);
+      console.error("Error toggling track:", error);
     }
   };
 

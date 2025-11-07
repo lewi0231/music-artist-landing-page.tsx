@@ -2,8 +2,24 @@
 import { useIsMobile } from "@/hooks/use-is-mobile";
 import { motion, useScroll, useTransform } from "framer-motion";
 import Image from "next/image";
-import { useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef } from "react";
 import ParallaxTrack from "./parallax-track";
+
+// SoundCloud Widget API types
+type SoundCloudWidget = {
+  toggle: () => void;
+  play: () => void;
+  pause: () => void;
+  bind: (event: string, callback: () => void) => void;
+};
+
+declare global {
+  interface Window {
+    SC?: {
+      Widget: (iframe: HTMLIFrameElement) => SoundCloudWidget;
+    };
+  }
+}
 
 interface Track {
   title: string;
@@ -179,6 +195,37 @@ export default function ParallaxSection({ tracks }: ParallaxSectionProps) {
   // Responsive multiplier - reduce parallax intensity on mobile
   const parallaxMultiplier = isMobile ? 0.3 : 1;
 
+  // Widget manager: store widget instances by track index
+  const widgetRefs = useRef<Map<number, SoundCloudWidget | null>>(new Map());
+
+  // Function to get or create widget for a specific iframe
+  const getOrCreateWidget = useCallback(
+    (index: number, iframe: HTMLIFrameElement | null) => {
+      if (!iframe) return null;
+
+      // Check if widget already exists for this index
+      const existingWidget = widgetRefs.current.get(index);
+      if (existingWidget) {
+        return existingWidget;
+      }
+
+      // Wait for SoundCloud API to be available
+      if (!window.SC) {
+        return null;
+      }
+
+      try {
+        const widget = window.SC.Widget(iframe);
+        widgetRefs.current.set(index, widget);
+        return widget;
+      } catch (error) {
+        console.error(`Error creating widget for track ${index}:`, error);
+        return null;
+      }
+    },
+    []
+  );
+
   // Load SoundCloud API script only when this component mounts
   // This avoids loading it globally and hurting LCP/mobile performance
   useEffect(() => {
@@ -299,6 +346,7 @@ export default function ParallaxSection({ tracks }: ParallaxSectionProps) {
             scrollYProgress={scrollYProgress}
             parallaxMultiplier={parallaxMultiplier}
             index={index}
+            getWidget={getOrCreateWidget}
           />
         );
       })}

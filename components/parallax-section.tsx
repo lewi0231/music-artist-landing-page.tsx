@@ -179,6 +179,31 @@ export default function ParallaxSection({ tracks }: ParallaxSectionProps) {
   // Responsive multiplier - reduce parallax intensity on mobile
   const parallaxMultiplier = isMobile ? 0.3 : 1;
 
+  // Load SoundCloud API script only when this component mounts
+  // This avoids loading it globally and hurting LCP/mobile performance
+  useEffect(() => {
+    // Check if script is already loaded
+    if (window.SC) return;
+
+    // Check if script tag already exists
+    const existingScript = document.querySelector(
+      'script[src="https://w.soundcloud.com/player/api.js"]'
+    );
+    if (existingScript) return;
+
+    // Dynamically load the script
+    const script = document.createElement("script");
+    script.src = "https://w.soundcloud.com/player/api.js";
+    script.async = true;
+    document.body.appendChild(script);
+
+    return () => {
+      // Cleanup: remove script if component unmounts (optional, usually keep it)
+      // Uncomment if you want to remove script when component unmounts
+      // script.remove();
+    };
+  }, []);
+
   // Fade out texture when parallax section is in view
   const textureOpacity = useTransform(
     scrollYProgress,

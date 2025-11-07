@@ -55,7 +55,11 @@ export default function ParallaxTrack({
   const isMobile = useIsMobile();
   const trackRef = useRef(null);
   const iframeRef = useRef<HTMLIFrameElement | null>(null);
-  const isInView = useInView(trackRef, { once: true, margin: "200px" });
+
+  const isInView = useInView(trackRef, {
+    once: true,
+    margin: "400px 0px 0px 0px",
+  });
 
   // Calculate transforms based on config
   const yOutput = config.parallax.y.map((v) => v * parallaxMultiplier);
@@ -84,9 +88,29 @@ export default function ParallaxTrack({
   // Handle track click
   const handleTrackClick = () => {
     const iframe = iframeRef.current;
-    if (iframe && window.SC) {
+
+    console.debug("Track clicked:", {
+      hasIframe: !!iframe,
+      hasWindowSC: typeof window.SC !== "undefined",
+      windowSC: window.SC,
+    });
+
+    if (!iframe) {
+      console.warn("No iframe reference");
+      return;
+    }
+
+    if (typeof window.SC === "undefined") {
+      console.warn("Souncloud API not loaded yet");
+      return;
+    }
+
+    try {
       const widget = window.SC.Widget(iframe);
+      console.log("Widget created:", widget);
       widget.toggle();
+    } catch (error) {
+      console.error("Error creating soundcloud widget or toggling", error);
     }
   };
 

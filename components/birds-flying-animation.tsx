@@ -1,3 +1,5 @@
+"use client";
+
 import animationData from "@/public/animations/birdies.json";
 
 import dynamic from "next/dynamic";

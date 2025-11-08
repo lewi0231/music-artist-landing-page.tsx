@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect, useRef, useState } from "react";
 
 // Smoothing factor for cursor movement
@@ -87,13 +89,12 @@ export function useCursor(cursorRef: React.RefObject<HTMLElement | null>) {
       setIsVisible(true);
 
       // Check if element is clickable
-      const target = e.target as HTMLElement;
-      const isClickable =
-        target.tagName === "A" ||
-        target.tagName === "BUTTON" ||
-        target.tagName === "IFRAME" ||
-        target.getAttribute("role") === "button" ||
-        window.getComputedStyle(target).cursor === "pointer";
+      const target = e.target as HTMLElement | null;
+      const pointerTarget = target?.closest("[data-pointer]");
+      const nativeClickable = target?.closest(
+        'a, button, input, textarea, select, summary, [role="button"]'
+      );
+      const isClickable = Boolean(pointerTarget ?? nativeClickable);
 
       isPointerRef.current = isClickable;
       setIsPointer(isClickable);

@@ -1,8 +1,7 @@
 "use client";
 
 import { useIsMobile } from "@/hooks/use-is-mobile";
-import { motion, MotionValue, useInView, useTransform } from "framer-motion";
-import { useRef } from "react";
+import { motion, MotionValue, useTransform } from "framer-motion";
 import type { TrackConfig } from "./parallax-section";
 
 interface Track {
@@ -19,26 +18,6 @@ interface ParallaxTrackProps {
   scrollYProgress: MotionValue<number>;
   parallaxMultiplier: number;
   index: number;
-  getWidget: (
-    index: number,
-    iframe: HTMLIFrameElement | null
-  ) => SoundCloudWidget | null;
-}
-
-// SoundCloud Widget API types (shared with parent)
-type SoundCloudWidget = {
-  toggle: () => void;
-  play: () => void;
-  pause: () => void;
-  bind: (event: string, callback: () => void) => void;
-};
-
-declare global {
-  interface Window {
-    SC?: {
-      Widget: (iframe: HTMLIFrameElement) => SoundCloudWidget;
-    };
-  }
 }
 
 // Helper to generate input range matching output array length
@@ -57,17 +36,8 @@ export default function ParallaxTrack({
   config,
   scrollYProgress,
   parallaxMultiplier,
-  index,
-  getWidget,
 }: ParallaxTrackProps) {
   const isMobile = useIsMobile();
-  const trackRef = useRef(null);
-  const iframeRef = useRef<HTMLIFrameElement | null>(null);
-
-  const isInView = useInView(trackRef, {
-    once: true,
-    margin: "400px 0px 0px 0px",
-  });
 
   // Calculate transforms based on config
   const yOutput = config.parallax.y.map((v) => v * parallaxMultiplier);
@@ -93,36 +63,13 @@ export default function ParallaxTrack({
     xOutput
   );
 
-  // Handle track click
-  const handleTrackClick = () => {
-    const iframe = iframeRef.current;
-
-    if (!iframe) {
-      console.warn("No iframe reference");
-      return;
-    }
-
-    // Get widget from parent manager (reuses existing instance)
-    const widget = getWidget(index, iframe);
-
-    if (!widget) {
-      console.warn("Widget not available yet (API may still be loading)");
-      return;
-    }
-
-    try {
-      widget.toggle();
-    } catch (error) {
-      console.error("Error toggling track:", error);
-    }
-  };
-
   const positioning =
     isMobile && config.mobile ? config.mobile : config.desktop;
 
+  const cardHeight = Number(positioning.height ?? 300);
+
   return (
     <motion.div
-      ref={trackRef}
       style={{
         y,
         scale,
@@ -130,27 +77,30 @@ export default function ParallaxTrack({
       }}
       className={`absolute ${positioning.top} ${
         positioning.left || positioning.right || ""
-      } ${positioning.width} group cursor-pointer`}
+      } ${positioning.width}`}
     >
-      <div className="block relative rounded-2xl overflow-hidden shadow-2xl">
-        {isInView && (
-          <iframe
-            ref={iframeRef}
-            data-pointer
-            src={`https://w.soundcloud.com/player/?url=${encodeURIComponent(
-              track.url
-            )}&color=%23ff5500&auto_play=false&hide_related=true&show_comments=false&show_user=false&show_reposts=false&show_teaser=false&visual=false`}
-            width="100%"
-            height={positioning.height}
-            frameBorder="no"
-            scrolling="no"
-          />
-        )}
-        <div
-          className="absolute inset-0 cursor-pointer"
+      <div
+        className="relative flex h-full w-full items-stretch overflow-hidden rounded-2xl border border-white/10 bg-neutral-900/50 shadow-2xl backdrop-blur"
+        style={{ minHeight: cardHeight }}
+      >
+        <a
+          href={track.url}
+          target="_blank"
+          rel="noreferrer"
           data-pointer
-          onClick={handleTrackClick}
-        />
+          className="flex w-full flex-1 flex-col items-center justify-center gap-3 px-6 py-8 text-center transition-colors hover:bg-white/10 focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-neutral-900"
+          aria-label={`Open ${track.title} on ${track.platform}`}
+        >
+          <span className="text-xs font-semibold uppercase tracking-[0.35em] text-white/60">
+            {track.platform}
+          </span>
+          <span className="text-2xl font-semibold text-white sm:text-3xl">
+            {track.title}
+          </span>
+          <span className="text-xs text-white/50">
+            Opens in a new SoundCloud tab
+          </span>
+        </a>
       </div>
     </motion.div>
   );

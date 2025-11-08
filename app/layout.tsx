@@ -37,7 +37,7 @@ export default function RootLayout({
         <link rel="preconnect" href="https://wave.sndcdn.com" />
         <link rel="preconnect" href="https://widget.sndcdn.com" />
         <link rel="preconnect" href="https://i1.sndcdn.com" />
-        <link rel="dns-prefetch" href="https://w.soundcloud.com" />
+        <link rel="preconnect" href="https://w.soundcloud.com" />
       </head>
       <body
         className={` ${inter.variable}  antialiased m-auto textured-background`}
@@ -47,12 +47,6 @@ export default function RootLayout({
         {children}
         <CustomCursor />
         <Footer />
-
-        {/* Load SoundCloud API script with defer for better performance */}
-        {/* <Script
-          src="https://w.soundcloud.com/player/api.js"
-          strategy="afterInteractive"
-        /> */}
       </body>
     </html>
   );

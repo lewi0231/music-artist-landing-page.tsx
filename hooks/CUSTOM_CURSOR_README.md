@@ -1,143 +1,51 @@
 # Custom Cursor Hook - Configuration Guide
 
-This guide explains how to customize the behavior of the custom cursor by adjusting various parameters in `use-custom-cursor.ts`.
+This guide reflects the current implementation of `use-custom-cursor.ts` and highlights the tunable parts of the animation loop.
 
 ## Overview
 
-The custom cursor provides a smooth, animated cursor that follows the mouse with configurable lag, stretching effects, and hover states. It automatically detects clickable elements and adjusts its appearance accordingly.
+The hook drives a trailing cursor that:
 
-## Key Parameters
+- Smoothly eases toward the mouse position.
+- Stretches in the direction of travel and compresses perpendicularly.
+- Rotates when movement is fast enough, reducing jitter.
+- Scales up on hover when the pointer is above an interactive element (native semantics or anything marked with `data-pointer`).
+- Exposes `isPointer` and `isVisible` so consuming components can change styles or hide the cursor when needed.
 
-### 1. `SPEED` - Cursor Lag/Smoothing
+## Key Parameters and Behaviours
 
-**Location:** Line 4 in `use-custom-cursor.ts`
+### 1. `SPEED` – Position Smoothing and Easing
 
-**What it does:** Controls how quickly the cursor catches up to the mouse position. This is the main parameter for adjusting lag.
+**Location:** top of `use-custom-cursor.ts`
 
-**Values:**
+Controls how quickly the animated cursor catches the actual pointer **and** how aggressively the scale value interpolates toward its target.
 
-- `0.05 - 0.08`: Very laggy, smooth, dreamy effect (heavy trailing)
-- `0.1 - 0.15`: Moderate lag, balanced feel
-- `0.2 - 0.3`: Snappy, responsive, minimal lag
-- `0.4+`: Very responsive, almost instant following
-
-**Example:**
-
-```typescript
-const SPEED = 0.08; // Heavy lag for smooth trailing effect
-```
-
-**Pro Tip:** Lower values create a more dramatic trailing effect but can feel sluggish. Higher values feel more responsive but lose the smooth trailing effect.
-
----
-
-### 2. Stretch Amount Calculation
-
-**Location:** Line 80 in `use-custom-cursor.ts`
-
-**What it does:** Controls how much the cursor stretches when moving. This creates the "motion blur" effect.
-
-**Current formula:**
+- `0.05 – 0.08`: pronounced lag and trailing (floaty feel).
+- `0.1 – 0.18`: balanced (default `0.08`).
+- `0.2+`: very responsive, minimal trailing.
 
 ```typescript
-const stretchAmount = Math.min((velocity / 100) * 0.5, 0.5);
+const SPEED = 0.08;
 ```
 
-**Parameters:**
+Lower values make the cursor feel dreamy and elastic; higher values tighten both position and scale transitions.
 
-- `velocity / 100`: Divides velocity to get a normalized value
-- `0.5`: Multiplier that controls stretch intensity
-- `0.5`: Maximum cap for stretch amount
+### 2. Velocity-to-Scale Mapping
 
-**Adjustments:**
-
-- **More stretching:** Increase the multiplier (e.g., `0.7` or `0.8`)
-- **Less stretching:** Decrease the multiplier (e.g., `0.3` or `0.2`)
-- **Higher max stretch:** Increase the cap (e.g., `0.8` or `1.0`)
-- **Different velocity scale:** Adjust `/100` to change sensitivity (lower = more sensitive)
-
-**Example - Subtle stretch:**
+Inside the animation loop:
 
 ```typescript
-const stretchAmount = Math.min((velocity / 150) * 0.3, 0.4);
+const scaleValue = Math.min((velocity / 100) * 0.75, 0.8);
+scale.current += (scaleValue - scale.current) * SPEED;
 ```
 
-**Example - Dramatic stretch:**
+- `velocity / 100`: normalises distance between smoothed cursor and live pointer.
+- `0.75`: intensity multiplier. Increase for more stretch, decrease for subtlety.
+- `0.8`: hard cap. Lower it to limit extreme stretching when velocity spikes.
 
-```typescript
-const stretchAmount = Math.min((velocity / 80) * 0.7, 0.9);
-```
+Using a larger multiplier? Consider dropping the cap so that fast flicks do not look distorted.
 
----
-
-### 3. Compression Factor
-
-**Location:** Lines 108 and 113 in `use-custom-cursor.ts`
-
-**What it does:** When the cursor stretches in one direction, it compresses in the perpendicular direction. This maintains visual area while changing shape.
-
-**Current values:**
-
-- Vertical movement: `finalScaleX = 1 - Math.abs(stretchY) * 0.6`
-- Horizontal movement: `finalScaleY = 1 - Math.abs(stretchX) * 0.6`
-
-**Adjustments:**
-
-- `0.6`: Moderate compression (current default)
-- `0.9`: More compression (slimmer perpendicular axis)
-- `0.3`: Less compression (maintains more circular shape)
-- `1.0`: Full compression (maintains exact area, can look too thin)
-
-**Example - More dramatic compression:**
-
-```typescript
-finalScaleX = 1 - Math.abs(stretchY) * 0.9;
-finalScaleY = 1 - Math.abs(stretchX) * 0.9;
-```
-
-**Example - Subtle compression (more circular):**
-
-```typescript
-finalScaleX = 1 - Math.abs(stretchY) * 0.3;
-finalScaleY = 1 - Math.abs(stretchX) * 0.3;
-```
-
----
-
-### 4. Hover Scale
-
-**Location:** Line 90 in `use-custom-cursor.ts`
-
-**What it does:** Makes the cursor larger when hovering over clickable elements (links, buttons, etc.)
-
-**Current value:**
-
-```typescript
-const targetHoverScale = isPointerRef.current ? 1.25 : 1;
-```
-
-**Adjustments:**
-
-- `1.25`: 25% larger (current default)
-- `1.5`: 50% larger (more noticeable)
-- `1.1`: 10% larger (subtle)
-- `1.0`: No size change (hover only changes style)
-
-**Example - More dramatic hover:**
-
-```typescript
-const targetHoverScale = isPointerRef.current ? 1.5 : 1;
-```
-
----
-
-### 5. Rotation Threshold
-
-**Location:** Line 85 in `use-custom-cursor.ts`
-
-**What it does:** Sets the minimum velocity required for the cursor to rotate to match movement direction.
-
-**Current value:**
+### 3. Rotation Threshold
 
 ```typescript
 if (velocity > 20) {
@@ -145,163 +53,140 @@ if (velocity > 20) {
 }
 ```
 
-**Adjustments:**
+- Threshold `20` gates rotation to higher speeds. Lower for always-on directional alignment, raise to keep slow movement upright.
+- Removing the guard causes rotation on every frame (expect jitter on micro-movements).
 
-- `10-15`: Rotates more easily (even with slow movement)
-- `20`: Current default (rotates with moderate movement)
-- `30-40`: Only rotates with fast movement
-- Remove condition: Always rotates (can be janky)
-
-**Example - Always rotate:**
+### 4. Low-Velocity Damping
 
 ```typescript
-angle.current = (Math.atan2(dy, dx) * 180) / Math.PI;
+if (velocity < 20) {
+  scale.current *= 0.95;
+}
 ```
 
----
+This nudges the cursor back toward a circle when movement slows. Adjust `0.95`:
 
-### 6. Base Cursor Size
+- Smaller (e.g. `0.9`): snaps back faster.
+- Larger (e.g. `0.98`): lets the stretched state linger.
 
-**Location:** `app/globals.css` line 97
+### 5. Hover Scale
 
-**What it does:** Sets the base size of the cursor circle.
-
-**Current value:**
-
-```css
---circle-size: 50px;
+```typescript
+const hoverScale = isPointerRef.current ? 1.25 : 1;
 ```
 
-**Adjustments:**
+- `1.25`: default 25% upscale for interactive targets.
+- Increase for a stronger callout (`1.4 – 1.6`).
+- Decrease toward `1` for subtle hover feedback.
 
-- `30px`: Small, subtle cursor
-- `50px`: Medium (current default)
-- `70px`: Large, prominent cursor
-- `100px`: Very large, bold statement
+Remember to keep the visual cursor size in sync with CSS variables such as `--circle-size` (see `app/globals.css`).
 
-**Note:** Changing this also affects positioning offsets on lines 105-106.
+### 6. Stretch Calculation
 
----
+```typescript
+const stretchAngle = (Math.atan2(dy, dx) * 180) / Math.PI;
+const stretchX = Math.cos((stretchAngle * Math.PI) / 180) * scale.current;
+const stretchY = Math.sin((stretchAngle * Math.PI) / 180) * scale.current;
 
-## Common Customization Patterns
+cursorRef.current.style.transform = `
+  translate(${circlePosition.current.x}px, ${circlePosition.current.y}px)
+  scale(${(1 + Math.abs(stretchX)) * hoverScale}, ${
+  (1 + Math.abs(stretchY)) * hoverScale
+})
+  rotate(${angle.current}deg)
+`;
+```
 
-### Smooth, Dreamy Cursor (Heavy Lag)
+- `stretchX`/`stretchY` project the scale along the movement vector.
+- Multiply either axis before applying `Math.abs` to bias stretching horizontally or vertically.
+- Wrap the `Math.abs` calls in `Math.min(..., cap)` if you want different limits per axis.
+- Update the transition (`transform .03s ease-in-out`) if you prefer different easing.
+
+### 7. Visibility Handling
+
+- `isVisible` flips to `true` on first mouse move and `false` on `mouseleave`. Use it to conditionally render or fade the custom cursor for a clean initial load and to prevent stale transforms after the pointer exits the viewport.
+- The hook never hides the native cursor; that responsibility lives in the consuming component/CSS so you can provide an accessibility toggle if needed.
+
+### 8. Hover Detection
+
+```typescript
+const pointerTarget = target?.closest("[data-pointer]");
+const nativeClickable = target?.closest(
+  'a, button, input, textarea, select, summary, [role="button"]'
+);
+const isClickable = Boolean(pointerTarget ?? nativeClickable);
+```
+
+- `data-pointer` opt-in works on any ancestor.
+- Native interactive elements are supported out of the box.
+- Extend `isClickable` to cover bespoke components (see Advanced section).
+
+## Customisation Recipes
+
+### Floaty and Expressive
 
 ```typescript
 const SPEED = 0.06;
-const stretchAmount = Math.min((velocity / 120) * 0.4, 0.5);
-const targetHoverScale = isPointerRef.current ? 1.3 : 1;
+const scaleValue = Math.min((velocity / 120) * 0.9, 1.0);
+const hoverScale = isPointerRef.current ? 1.35 : 1;
 ```
 
-### Snappy, Responsive Cursor
+### Snappy and Minimal Stretch
 
 ```typescript
-const SPEED = 0.25;
-const stretchAmount = Math.min((velocity / 80) * 0.6, 0.7);
-const targetHoverScale = isPointerRef.current ? 1.15 : 1;
+const SPEED = 0.18;
+const scaleValue = Math.min((velocity / 80) * 0.45, 0.5);
+const hoverScale = isPointerRef.current ? 1.12 : 1;
 ```
 
-### Dramatic Stretch Effect
+### Arrow-Like Pointer
 
 ```typescript
-const SPEED = 0.1;
-const stretchAmount = Math.min((velocity / 70) * 0.8, 0.9);
-// Compression factor: 0.9
+const SPEED = 0.12;
+angle.current = (Math.atan2(dy, dx) * 180) / Math.PI; // remove guard
+if (velocity < 20) {
+  scale.current *= 0.9;
+}
 ```
-
-### Minimal Stretch (More Circular)
-
-```typescript
-const SPEED = 0.15;
-const stretchAmount = Math.min((velocity / 150) * 0.2, 0.3);
-// Compression factor: 0.3
-```
-
-### No Stretch (Pure Circle)
-
-```typescript
-const SPEED = 0.15;
-const stretchAmount = 0; // Or remove stretch logic entirely
-// Compression: N/A
-```
-
----
 
 ## How It Works
 
-1. **Position Smoothing:** The cursor position follows the mouse using an exponential smoothing algorithm:
-
-   ```typescript
-   circlePosition += (mousePosition - circlePosition) * SPEED;
-   ```
-
-   Lower SPEED = slower catch-up = more lag.
-
-2. **Velocity Calculation:** The difference between smoothed position and actual mouse position creates velocity, which drives the stretch effect.
-
-3. **Shape Transformation:** Based on velocity and movement angle, the cursor stretches in the direction of movement and compresses perpendicularly.
-
-4. **Hover Detection:** On each mouse move, the hook checks if the target element is clickable and smoothly transitions the hover scale.
-
----
+1. **Tracking:** `mousePosition` stores the latest pointer location; `circlePosition` eases toward it each frame using `SPEED`.
+2. **Velocity:** Differences between those refs (`dx`, `dy`) define `velocity`, which powers stretch intensity and rotation gating.
+3. **Stretch and Rotate:** `scale.current` projects along the motion vector, creating anisotropic scaling, then the cursor rotates when velocity exceeds the threshold.
+4. **Hover State:** Event targets and ancestors are inspected for native clickability or `data-pointer`, toggling `isPointer` and adjusting `hoverScale`.
+5. **Visibility:** `isVisible` provides a simple signal for mounting/unmounting or cross-fading the custom cursor wrapper.
 
 ## Performance Notes
 
-- The animation loop runs continuously via `requestAnimationFrame` (~60fps)
-- Automatically disabled on mobile devices to save performance
-- Uses `willChange: transform` for optimal GPU acceleration
-- All calculations use refs to avoid unnecessary re-renders
-
----
+- Animation runs inside a single `requestAnimationFrame` loop; refs prevent unnecessary React renders.
+- Keep the cursor element lightweight and GPU-friendly (e.g. `will-change: transform; pointer-events: none;`).
+- Consider mounting the hook conditionally on pointer-capable devices so touch users avoid the extra work.
 
 ## Troubleshooting
 
-**Cursor feels too laggy:**
-
-- Increase `SPEED` value (try 0.12 or 0.15)
-
-**Cursor feels too responsive (no lag):**
-
-- Decrease `SPEED` value (try 0.06 or 0.08)
-
-**Stretching is too subtle:**
-
-- Increase the stretch multiplier (line 80, second parameter)
-- Decrease the velocity divisor (line 80, `/100`)
-
-**Stretching is too dramatic:**
-
-- Decrease the stretch multiplier
-- Increase the velocity divisor
-- Lower the maximum cap
-
-**Hover effect not noticeable:**
-
-- Increase `targetHoverScale` value (line 90)
-
-**Cursor not rotating:**
-
-- Lower the velocity threshold (line 85) or remove the condition
-
----
+- **Too much lag:** increase `SPEED` incrementally (e.g. `0.1`, `0.14`).
+- **Stretch too subtle:** raise the `0.75` multiplier or lower the `/ 100` divisor.
+- **Stretch too extreme:** lower the multiplier or cap (`0.8` → `0.6`).
+- **Hover feedback weak:** raise the hover scale or apply extra styling when `isPointer` is `true`.
+- **Cursor jitters on slow movement:** increase the rotation threshold (e.g. `30`).
+- **Cursor never hides:** ensure your cursor component reads `isVisible` and toggles visibility appropriately.
 
 ## Advanced: Custom Hover Detection
 
-To add custom elements that trigger hover state, modify the `isClickable` check in `handleMouseMove` (lines 139-145):
+Extend the clickability check with your own selectors:
 
 ```typescript
-const isClickable =
-  target.hasAttribute("data-pointer") ||
-  target.tagName === "A" ||
-  target.tagName === "BUTTON" ||
-  target.tagName === "IFRAME" ||
-  target.getAttribute("role") === "button" ||
-  target.closest("[data-pointer]") !== null ||
-  target.classList.contains("your-custom-class"); // Add your own
+const customInteractive = target?.closest(".interactive-card");
+const isClickable = Boolean(
+  pointerTarget ?? nativeClickable ?? customInteractive
+);
 ```
 
-Or use the `data-pointer` attribute on any element:
+Or simply mark elements with `data-pointer`:
 
 ```html
-<div data-pointer>This will trigger hover state</div>
+<div data-pointer>Hover me to trigger the pointer state</div>
 ```
+
+Pair this with breakpoint-aware logic (e.g. your `useIsMobile` hook) to disable the custom cursor on touch devices while keeping the documentation accurate for pointer users.

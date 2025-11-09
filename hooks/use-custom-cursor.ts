@@ -12,6 +12,9 @@ export function useCursor(cursorRef: React.RefObject<HTMLElement | null>) {
   //   Ref to track isPointer for use in animation loop
   const isPointerRef = useRef(false);
 
+  // Ref to track hoverScale
+  const hoverScale = useRef(1);
+
   // Track actual mouse position
   const mousePosition = useRef({ x: 0, y: 0 });
 
@@ -57,7 +60,8 @@ export function useCursor(cursorRef: React.RefObject<HTMLElement | null>) {
         scale.current *= 0.95;
       }
 
-      const hoverScale = isPointerRef.current ? 1.25 : 1;
+      const targetHoverScale = isPointerRef.current ? 1.25 : 1;
+      hoverScale.current += (targetHoverScale - hoverScale.current) * SPEED;
 
       // Calculate stretch direction based on movement angle
       const stretchAngle = (Math.atan2(dy, dx) * 180) / Math.PI;
@@ -67,8 +71,8 @@ export function useCursor(cursorRef: React.RefObject<HTMLElement | null>) {
       // Apply transforms directly to the DOM element
       const transform = `
         translate(${circlePosition.current.x}px, ${circlePosition.current.y}px) 
-        scale(${(1 + Math.abs(stretchX)) * hoverScale}, ${
-        (1 + Math.abs(stretchY)) * hoverScale
+        scale(${(1 + Math.abs(stretchX)) * hoverScale.current}, ${
+        (1 + Math.abs(stretchY)) * hoverScale.current
       }) 
         rotate(${angle.current}deg)
       `;

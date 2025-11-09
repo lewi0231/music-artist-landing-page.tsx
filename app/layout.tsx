@@ -15,8 +15,7 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   title: "Decoding Seabirds",
-  description:
-    "Decoding Seabirds is the ambient/electronic music project of synth enthusiast Paul Lewis, based in Adelaide, Australia. With analogue and digital synths, guitars and occasional vocal samples, the music creates wide-open, atmospheric sound-scapes with subtle grooves. Originally manifested in the 2018 EP Ignition, the project has continued evolving to more recent singles such as ‘Singing Into Clouds’.",
+  description: "Musical artist with sample tracks",
 };
 
 export const viewport: Viewport = {
@@ -32,7 +31,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <head></head>
+      <head>
+        {/* Preconnect to SoundCloud domains for faster connection */}
+        <link rel="preconnect" href="https://api-widget.soundcloud.com" />
+        <link rel="preconnect" href="https://wave.sndcdn.com" />
+        <link rel="preconnect" href="https://widget.sndcdn.com" />
+        <link rel="preconnect" href="https://i1.sndcdn.com" />
+        <link rel="preconnect" href="https://w.soundcloud.com" />
+        <link rel="preconnect" href="https://soundcloud.com" />
+      </head>
       <body
         className={` ${inter.variable}  antialiased m-auto textured-background`}
       >

@@ -17,6 +17,10 @@ export const metadata: Metadata = {
   title: "Decoding Seabirds",
   description:
     "“Decoding Seabirds is the ambient/electronic music project of synth enthusiast Paul Lewis, based in Adelaide, Australia. With analogue and digital synths, guitars and occasional vocal samples, the music creates wide-open, atmospheric sound-scapes with subtle grooves. Originally manifested in the 2018 EP Ignition, the project has continued evolving to more recent singles such as ‘Singing Into Clouds’. ",
+  icons: {
+    icon: "/bird-logo.svg",
+    shortcut: "/bird-logo.svg",
+  },
 };
 
 export const viewport: Viewport = {
